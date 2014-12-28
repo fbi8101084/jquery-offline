@@ -3,28 +3,52 @@
  * version: 1.0.0
  */
 (function ($) {
-    var defOption = {
-        offlineResponse: {
-            message: 'Network not connect, data has saved in localStorage.',
-            localStorageKey: ''
+    function Offline() {
+        this.defOption = {
+            response: {
+                accessStatus: [500, 404],
+                message: 'Network not connect, data has saved in localStorage.',
+                key: ''
+            }
         }
+    }
 
+    Offline.prototype.checkIsAccessStatus = function (status, opts) {
+        return -1 !== $.inArray(status, opts.response.accessStatus);
     };
 
+    Offline.prototype.ajax = function (options) {
+        var _this = this,
+            d = $.Deferred(),
+            opts = $.extend({}, this.defOption, options);
+
+        $.ajax(opts.url, opts).done(function (response, status) {
+            if (_this.checkIsAccessStatus(status, opts)) {
+                d.resolve(opts.response);
+            } else {
+                d.resolve.apply(this, arguments);
+            }
+        }).fail(function (response, status) {
+            if (_this.checkIsAccessStatus(status, opts)) {
+                d.resolve(opts.response);
+            } else {
+                d.zIndex.apply(this, arguments);
+            }
+        });
+
+        return d.promise();
+    };
+
+
+
     $.offline = function (method, options) {
-        var d = $.Deferred();
+        var offline = new Offline();
+
         switch (method) {
             case 'ajax':
-
-                $.ajax(options.url, data, options).done(function (response, status) {
-
-                }).fail(function (response, status) {
-
-                });
-
-            default :
+                return offline.ajax(options);
+            default:
+                return this;
         }
-
-        return d.promise;
-    }
+    };
 })(jQuery);
