@@ -32,20 +32,12 @@
                     data[item.name] = $(item).val();
                 });
 
-                var aa = $.offline('ajax', {
-                    type: 'post',
+                $.offline('ajax', {
                     url: 'send.php',
+                    type: 'post',
                     data: data
-                });
-
-                aa.done(function () {
-                    console.log('done', arguments);
-                }).then(function () {
-                    console.log('then', arguments);
-                }).fail(function () {
-                    console.log('fail', arguments);
-                }).always(function () {
-                    console.log('always', arguments);
+                }).done(function (response) {
+//                    console.log(response.message);
                 });
             });
         })(jQuery);
