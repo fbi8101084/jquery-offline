@@ -17,6 +17,8 @@
   "strict": true,
   "globals": {
     /* MOCHA */
+    "jQuery": false,
+    "window": false,
     "alert": false,
     "angular": false
   }
