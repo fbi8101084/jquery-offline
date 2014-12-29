@@ -21,14 +21,17 @@ gulp.task('biuld:css', function () {
 gulp.task('biuld:js', function() {
     gulp.src(paths.js)
         .pipe(jshint())
+        .pipe(jshint.reporter('jshint-stylish'))
         .pipe(uglify())
-        .pipe(concat('all.min.js'))
+        .pipe(concat('jquery-offline.min.js'))
         .pipe(gulp.dest('./dist/js/'));
 });
 
 gulp.task('biuld:js_dev', function() {
     gulp.src(paths.js)
-        .pipe(concat('all.src.js'))
+        .pipe(jshint())
+        .pipe(jshint.reporter('jshint-stylish'))
+        .pipe(concat('jquery-offline.src.js'))
         .pipe(gulp.dest('./dist/js/'));
 });
 
@@ -37,7 +40,6 @@ gulp.task('watch', function() {
     gulp.start('biuld:css', 'biuld:js', 'biuld:js_dev');
     gulp.watch(paths.css[0], ['compass']);
     gulp.watch(paths.js[0], ['biuld:js_dev', 'biuld:js']);
-    gulp.watch(paths.js[1], ['biuld:js_dev', 'biuld:js']);
 });
 
 gulp.task('default', function() {
