@@ -9,6 +9,6 @@ jquery-offline
 When you have no network, program will save data in localStorage automatically. Then it will resend XHR when check( setTimeout function ) network is fine or next time program initialize.
 
 ### jQuery 版本限制
-請使用版本 jQuery 1.5 以上
+請使用版本 jQuery 1.2 以上
 
 
