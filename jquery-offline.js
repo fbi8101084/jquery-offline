@@ -221,11 +221,19 @@
                 return _this.delete.apply(_this, arguments);
 
             case 'ajax':
-                return _this.ajax.apply(_this, arguments);
+                var opts;
+                switch (arguments.length) {
+                    case 2:
+                        opts = arguments[1];
+                        return _this.ajax.call(_this, opts);
 
-            default:
-                return _this;
+                    case 3:
+                        opts = arguments[2];
+                        opts.url = arguments[1];
+                        return _this.ajax.call(_this, opts);
+                }
         }
+        return _this;
     };
 
     var offline = new Offline();
