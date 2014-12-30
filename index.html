@@ -32,21 +32,18 @@
                     data[item.name] = $(item).val();
                 });
 
-//                $.offline('ajax', {
-//                    type: 'post',
-//                    url: 'send.php',
-//                    data: data
-//                })
+                $.offline('ajax', 'send.php', {
+                    type: 'post',
+                    data: data
+                })
 
-                var aa = $.offline('get', 'send.php', data)
+//                var aa = $.offline('get', 'send.php', data)
 //                $.offline('delete', 'send.php', data)
 //                $.offline('put', 'send.php', data)
 //                $.offline('post', 'send.php', data)
                 .done(function (response) {
-                    console.log(response);
+//                    console.log(response);
                 });
-
-                console.log(aa);
             });
         })(jQuery);
     </script>
