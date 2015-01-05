@@ -75,7 +75,8 @@
 
         if (0 <= index) {
             localStorage.removeItem(key);
-            _this.splice(index, 1);
+            _this.cacheList.splice(index, 1);
+            localStorage.jqOffline = JSON.stringify(_this.cacheList);
             return true;
         }
 
