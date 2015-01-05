@@ -21,7 +21,6 @@
     * */
     Offline.prototype.offConfig = function () {
         return {
-            accessStatus: [500, 404], // 如果 httpStatus 是 500 或 404 就會進行本機端暫存
             message: 'Network not connect, data has saved in localStorage.',
             key: '',
             checkTime: this.checkTime
@@ -58,20 +57,13 @@
 
                 // don't need to do callback
                 _this.main('ajax', opts).done(function (response, status) {
-                    if (!_this.checkIsAccessStatus(status, opts)) {
+                    if (!response.isOffline) {
                         _this.removeKeyFromList(opts.offConfig.key);
                         _this.networkIsConnect = true;
                     }
                 });
             });
         }
-    };
-
-    /*
-    * 判斷狀態是否符合陣列中的狀態，符合的話將定義為離線
-    * */
-    Offline.prototype.checkIsAccessStatus = function (status, opts) {
-        return -1 !== $.inArray(status, opts.offConfig.accessStatus);
     };
 
     /*
@@ -164,15 +156,12 @@
         opts = $.extend({ offConfig: _this.offConfig() }, opts);
 
         $.ajax(opts).done(function (response, status) {
-            if (_this.checkIsAccessStatus(status, opts)) {
-                _this.saveDataInLocal(opts);
-                d.resolve(opts.offConfig, status);
-            } else {
-                d.resolve.apply(_this, arguments);
-            }
+            d.resolve.apply(_this, arguments);
         }).fail(function (response) {
-            if (_this.checkIsAccessStatus(response.status, opts)) {
+            if (0 === response.status) {
                 _this.saveDataInLocal(opts);
+                opts.offConfig.isOffline = true;
+                _this.networkIsConnect = false;
                 d.resolve(opts.offConfig, response.status);
             } else {
                 d.reject.apply(_this, arguments);
